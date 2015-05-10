@@ -1,191 +1,99 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-namespace App\Service;
-
-/**
- * 
- * Ponuja vmesnik do nastavitev aplikacije 
- * Storitev je ponujena preko jsonRpc
- *
- * @author boris
- */
-class OptionsService
-        extends \Max\Service\AbstractMaxService
+class PostniNaslov
+        extends \Max\Entity\Base
 {
+    /**
+     * Naziv
+     *
+     * @ORM\Column(length=50, nullable=true)
+     *
+     * @Max\I18n(label="Naziv", description="Naziv naslova")
+     * @Max\Ui(type="naziv",ident=true )
+     * @var string
+     */
+    protected $naziv;
 
     /**
-     * Za nastavljanje vrednosti opcij   - verjetno jo bomo ukinili
-     * 
-     * @param string $name
-     * @param mixed $value
-     * @param bool $global
-     * retuns array errors
+     * @ORM\Column(length=50, nullable=true)
+     * @Max\I18n(label="Dodatni naziv", description="Dodatni naziv naslova")
      */
-    public function setValue($name, $value, $global = false)
-    {
-        $em   = $this->getEm();
-        $orep = $em->getRepository('App\Entity\Option');
-
-        $opt = $orep->find($name);
-
-        $user = $this->getIdentity();
-
-        $this->expectPermission('options-');
-    }
+    private $nazivDva;
 
     /**
-     * Vrne vrednost opcij po logiki per user -> globalno -> default 
-     * 
-     * Prebere iz entitet Option in OptionValue
-     * 
-     * @param string $name
-     * @return mixed
+     * Ulica naslovnika
+     *
+     * @ORM\Column(length=50, nullable=true)
+     * @var string
+     *
+     * @Max\I18n(label="Ulica",  description="Ulica naslova")
      */
-    public function getOptions($name)
-    {
-         $em = $this->getEm();
-
-        $rep    = $em->getRepository('App\Entity\Option');
-        $valRep = $em->getRepository('App\Entity\OptionValue');
-
-        /* @var $opt \App\Entity\Option */
-        $opt = $rep->findOneByName($name);
-
-        $this->expect($opt, 'Opcije ne obstajajo ' . $name, 1000403);
-
-        // najprej preveri ali je opcija uporabniško nastavljiva
-        if ($opt->getPerUser()) {
-            //  s katerim uporabniškim imenom je uporabnik prijavljen
-            $username = $this->getUsername();
-            $optValue = $em->getRepository('App\Entity\OptionValue')
-                    ->getOptionValuesUserValue($opt->getName(), $username);
-            if (!empty($optValue)) {
-                return $optValue;
-            }
-        }
-
-        // preveri, če ima globalno opcijo
-        if (!$opt->getReadOnly()) {
-            $optValue = $em->getRepository('App\Entity\OptionValue')
-                    ->getOptionValuesGlobalValue($opt->getName());
-            if (!empty($optValue)) {
-                return $optValue;
-            }
-        }
-
-        // če nima niti uporabniške niti globalne nastavitve
-        return $opt->getDefaultValue();
-    }
+    protected $ulica;
 
     /**
-     * 
-     * Nastavi uporabniško opcijo v OptionValue entiteti
-     * 
-     * @param type $name    Ime opcij
-     * @param type $value   vrednost, ki jo vstavi
-     * @return boolean
+     * Dodatno polje za ulico (ulica2)
+     *
+     * @ORM\Column(length=50, nullable=true)
+     * @var string
+     *
+     * @Max\I18n(label="Ulica",  description="Dodatni podatki o ulici")
      */
-    public function setUserOption($name, $value)
-    {
-        $em  = $this->getEm();
-        $rep = $em->getRepository('App\Entity\Option');
-
-        /* @var $opt \App\Entity\Option */
-        $opt = $rep->findOneByName($name);
-
-        $this->expect($opt, 'Opcije ne obstajajo ' . $name, 1000404);
-
-        if ($opt->getReadOnly()) {
-            // preveri, če ima globalno opcijo
-            $this->expect($opt, 'Opcija ni globalna ' . $name, 1000405);
-        }
-        if (!$opt->getPerUser()) {
-            // preveri, če je opcije uporabniško nastavljiva
-            $this->expect($opt, 'Opcija ni uporabniško nastavljiva ' . $name, 1000406);
-        }
-
-        $username = $this->getUsername();
-
-        $optValR    = $em->getRepository('App\Entity\OptionValue');
-        $optValueId = $optValR->getOptionValuesUserId($name, $username);
-        if (empty($globalValueId)) {
-            // kreiramo nov zapis v OptionValue
-            $optVal = new OptionValue();
-            $optVal->setValue($value);
-            $optVal->setGlobal(false);
-            $optVal->addOption($opt);
-            $user   = $em->getRepository('Aaa\Entity\User')->findOneByUsername($username);
-            $optVal->addUser($user);
-        } else {
-            // le zamenjamo vrednost
-            $optVal = $optValR->findOneById($optValueId);
-            $optVal->setValue($value);
-        }
-        $em->persist($optVal);
-        $em->flush();
-
-        return true;
-    }
+    protected $ulicaDva;
 
     /**
-     * 
-     * Nastavi uporabniško opcijo v OptionValue entiteti
-     * 
-     * param type $value   vrednost, ki jo vstavi
-     * 
-     * @param type $name    Ime opcij
-     * @param type $value   vrednost, ki jo vstavi
-     * @return boolean   
+     * Pošta
+     *  poštna številka
+     *
+     * @ORM\Column(length=50, nullable=true)
+     *
+     * @Max\I18n(label="Pošta", description="Poštna številka")
+     * @Max\Ui(group="posta")
      */
-    public function setGlobalOption($name, $value)
-    {
-        $em  = $this->getEm();
-        $rep = $em->getRepository('App\Entity\Option');
+    protected $posta;
 
-        /* @var $opt \App\Entity\Option */
-        $opt = $rep->findOneByName($name);
+    /**
+     * Pošta
+     *  naziv pošte
+     *
+     * @ORM\Column(length=50, nullable=true)
+     *
+     * @Max\I18n(label="Naziv", description="Naziv pošte")
+     * @Max\Ui(group="posta")
+     */
+    protected $postaNaziv;
 
-        $this->expect($opt, 'Opcije ne obstajajo ' . $name, 1000401);
+    /**
+     * Pokrajina
+     *
+     * @ORM\Column(length=50, nullable=true)
+     * @var string
+     *
+     * @Max\I18n(label="Pokrajina",  description="Pokrajina v kateri je ta naslov")
+     */
+    protected $pokrajina;
 
-        if ($opt->getReadOnly()) {
-            // preveri, če ima globalno opcijo 
-            $this->expect($opt, 'Opcija ni globalna ' . $name, 1000402);
-        }
+    /**
+     * Je klient iz EU
+     *  checkbox 
+     *
+     * @ORM\Column(type="boolean", length=1, nullable=true)
+     * @var bool
+     *
+     * @Max\Ui(type="boolcheckbox",group="Davčni podatki")
+     * @Max\I18n(label="Iz EU", description="Je klient iz EU")
+     */
+    protected $jeeu = true;
 
-        $optValR       = $em->getRepository('App\Entity\OptionValue');
-        $globalValueId = $optValR->getOptionValuesGlobalId($name);
-        if (empty($globalValueId)) {
-            // kreiramo nov zapis v OptionValue
-            $optVal = new OptionValue();
-            $optVal->setValue($value);
-            $optVal->setGlobal(true);
-            $optVal->addOption($opt);
-        } else {
-            // le zamenjamo vrednost
-            $optVal = $optValR->findOneById($globalValueId);
-            $optVal->setValue($value);
-        }
-        $em->persist($optVal);  // $$ ali je lahko več persistov pred flush-em?
-        $em->flush();
-
-        return true;
-    }
-/**
- * - verjetno jo bomo ukinili
- * 
- * @param type $name
- * @throws Exception
- */
-    public function getOptionsWithFlags($name)
-    {
-
-        throw new Exception('implementiraj ali ukini', 9999999);
-    }
+    /**
+     * Oznaka ali je naslov privzet
+     *  (npr. za poslovnega partnerja, ki lahko ima več naslovov)
+     *
+     * @ORM\Column(type="boolean", nullable=true)
+     * @var boolean
+     *
+     * @Max\Ui(type="boolcheckbox")
+     * @Max\I18n(label="Privzeti naslov", description="A je to privzeti naslov za poslovnega partnerja")
+     */
+    protected $privzeti = false;
 
 }
