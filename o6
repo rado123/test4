@@ -2,85 +2,11 @@
 
 class PostniNaslov
         extends \Max\Entity\Base
-{
-    /**
-     * Naziv
-     *
-     * @ORM\Column(length=50, nullable=true)
-     *
-     * @Max\I18n(label="Naziv", description="Naziv naslova")
-     * @Max\Ui(type="naziv",ident=true )
-     * @var string
-     */
-    protected $naziv;
-
-    /**
-   protected $ulica;
-dopisano v branchu master
-    /**
-     * Dodatno polje za ulico (ulica2)
-     *
-     * @ORM\Column(length=50, nullable=true)
-     * @var string
-     *
-     * @Max\I18n(label="Ulica",  description="Dodatni podatki o ulici")
-     */
-    protected $ulicaDva;
-
-    /**
-     * Pošta
-     *  poštna številka
-     *
-     * @ORM\Column(length=50, nullable=true)
-     *
-     * @Max\I18n(label="Pošta", description="Poštna številka")
-     * @Max\Ui(group="posta")
-     */
-    protected $posta;
-
-    /**
-     * Pošta
-     *  naziv pošte
-     *
-     * @ORM\Column(length=50, nullable=true)
-     *
-     * @Max\I18n(label="Naziv", description="Naziv pošte")
-     * @Max\Ui(group="posta")
-     */
-    protected $postaNaziv;
-
-    /**
-     * Pokrajina
-     *
-     * @ORM\Column(length=50, nullable=true)
-     * @var string
-     *
-     * @Max\I18n(label="Pokrajina",  description="Pokrajina v kateri je ta naslov")
-     */
-    protected $pokrajina;
-
-    /**
-     * Je klient iz EU
-     *  checkbox 
-     *
-     * @ORM\Column(type="boolean", length=1, nullable=true)
-     * @var bool
-     *
-     * @Max\Ui(type="boolcheckbox",group="Davčni podatki")
-     * @Max\I18n(label="Iz EU", description="Je klient iz EU")
-     */
-    protected $jeeu = true;
-
-    /**
-     * Oznaka ali je naslov privzet
-     *  (npr. za poslovnega partnerja, ki lahko ima več naslovov)
-     *
-     * @ORM\Column(type="boolean", nullable=true)
-     * @var boolean
-     *
-     * @Max\Ui(type="boolcheckbox")
-     * @Max\I18n(label="Privzeti naslov", description="A je to privzeti naslov za poslovnega partnerja")
-     */
+/
     protected $privzeti = false;
 
 }
+opombe;
+$drzavljanstvo;
+$drzavaRojstva;
+$krajRojstva;
