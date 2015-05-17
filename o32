@@ -1,2 +1,5 @@
-master 32
-r.b
+|.faza:|_\3=.predprodukcija|_/2=^.produkcija|_/2=^.postprodukcija|_/2=^.arhiv|
+|.podfaza:|=.ideja|=.poziv|=.potrjen program|
+|govorimo o:|=.projektu|\5=.uprizoritvi|
+|tipi dogodka:|\3=.projekt (skica)|=.vaje,predstava(premiera)|\2=.vaje, predstave (2.,3.,...n-ta)||
+||\6=.-----------------------------------------------------   čas   --------------------------------------------------->|

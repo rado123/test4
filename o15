@@ -1,2 +1,5 @@
- naziv;
-$krajRojstva;
+|faza|\3=.predprodukcija|/2.produkcija=.|postprodukcija|arhiv|
+|podfaza|ideja|poziv|potrjen program||||
+|govorimo o|projektu|\5.uprizoritvi|
+|tipi dogodka|\3=.projekt|vaje,predstava(premiera)|\2=.vaje, predstava (2.,3.,...n-ta)|
+||\6=.-----------------------------------              čas                ----------------------------------->|
